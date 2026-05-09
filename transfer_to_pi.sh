@@ -1,0 +1,1 @@
+sshpass -p 'REDACTED' scp -r raspberrypi/ student@192.168.137.1:~

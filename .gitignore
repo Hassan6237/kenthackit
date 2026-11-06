@@ -6,3 +6,4 @@ __pycache__
 
 # Runtime data (user accounts, alert log) — never commit real data
 backend/server/data/*.json
+!.env.example

@@ -35,7 +35,7 @@ cd backend
 pip install -r requirements.txt
 ```
 
-Create `backend/server/.env`. It is git-ignored, so your credentials are never committed:
+Copy `backend/server/.env.example` to `backend/server/.env` and fill in your keys. `.env` is git-ignored, so your credentials are never committed:
 
 ```env
 TWILIO_SID=your-account-sid

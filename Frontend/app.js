@@ -19,9 +19,10 @@ function saveSession(device_id, name, email) {
 }
 
 function clearSession() {
-  ["device_id", "name", "email",
-   "reg_device_id", "reg_name", "reg_email", "reg_password", "reg_medical"]
+  ["device_id", "name", "email"]
     .forEach(function(k) { localStorage.removeItem(k); });
+  ["reg_device_id", "reg_name", "reg_email", "reg_password", "reg_medical"]
+    .forEach(function(k) { sessionStorage.removeItem(k); });
 }
 
 function logout() {
@@ -106,11 +107,11 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // save temporarily and move to contacts step
-        localStorage.setItem("reg_device_id",  device_id);
-        localStorage.setItem("reg_name",        name);
-        localStorage.setItem("reg_email",       email);
-        localStorage.setItem("reg_password",    password);
-        localStorage.setItem("reg_medical",     medical_notes);
+        sessionStorage.setItem("reg_device_id",  device_id);
+        sessionStorage.setItem("reg_name",        name);
+        sessionStorage.setItem("reg_email",       email);
+        sessionStorage.setItem("reg_password",    password);
+        sessionStorage.setItem("reg_medical",     medical_notes);
 
         window.location.href = "1timeUser.html";
 
@@ -167,7 +168,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (setupForm) {
 
     // guard — no pending registration means someone landed here directly
-    if (!localStorage.getItem("reg_device_id")) {
+    if (!sessionStorage.getItem("reg_device_id")) {
       window.location.href = "Register.html";
       return;
     }
@@ -190,11 +191,11 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       var payload = {
-        device_id:     localStorage.getItem("reg_device_id"),
-        name:          localStorage.getItem("reg_name"),
-        email:         localStorage.getItem("reg_email"),
-        password:      localStorage.getItem("reg_password"),
-        medical_notes: localStorage.getItem("reg_medical"),
+        device_id:     sessionStorage.getItem("reg_device_id"),
+        name:          sessionStorage.getItem("reg_name"),
+        email:         sessionStorage.getItem("reg_email"),
+        password:      sessionStorage.getItem("reg_password"),
+        medical_notes: sessionStorage.getItem("reg_medical"),
         contacts: {
           "1": { name: c1name,  phone: c1phone },
           "2": { name: c2name,  phone: c2phone },
@@ -216,7 +217,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           // clear temp reg data
           ["reg_device_id", "reg_name", "reg_email", "reg_password", "reg_medical"]
-            .forEach(function (k) { localStorage.removeItem(k); });
+            .forEach(function (k) { sessionStorage.removeItem(k); });
 
           showMsg("ok", "Account created! Taking you to the dashboard...");
           setTimeout(function () { window.location.href = "Dashboard.html"; }, 1200);

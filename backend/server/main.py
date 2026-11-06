@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, abort
 from flask_cors import CORS
 from twilio.rest import Client
+from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 import os
 import re
@@ -82,7 +83,7 @@ def register():
         "device_id":     device_id,
         "name":          data["name"],
         "email":         data["email"],
-        "password":      data["password"],
+        "password_hash": generate_password_hash(data["password"]),
         "medical_notes": data.get("medical_notes", ""),
         "contacts":      contacts,
         "registered_at": datetime.now().isoformat(),
@@ -102,7 +103,7 @@ def login():
     if not user:
         return jsonify({"error": "Device not found. Check your ID or register first."}), 404
 
-    if user["password"] != data["password"]:
+    if not check_password_hash(user.get("password_hash", ""), data["password"]):
         return jsonify({"error": "Incorrect password."}), 401
 
     return jsonify({
